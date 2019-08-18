@@ -43,7 +43,7 @@ if(!file.exists(features_path)){
 features <- read.table(features_path)
 
 ## MERGE DATA ------------------------------------------------------------------
-# Merge the activity labels with the corresponding the train/test data and then
+# Merge the activity labels with the corresponding train/test data and then
 #       merge all the test and train data together
 
 # Merge xtrain with ytrain and then merge xtest with ytest putting the activity in the last column
@@ -87,8 +87,8 @@ levels(train_test_mean_std$`Activity Label`) <- c("WALKING","WALKING_UPSTAIRS",
 # It seems to be unintentional, but 6 variable names have "BodyBody" in their title.
 # We will replace this with just "Body" as the feature_info.txt file matches this interpretation.
 
-feature_names <- as.character(features[features_mean_std,2])
-features_names_fixed <- gsub("BodyBody","Body", feature_names)
+features_names <- as.character(features[features_mean_std,2])
+features_names_fixed <- gsub("BodyBody","Body", features_names)
 names(train_test_mean_std) <- c(features_names_fixed, "Activity Label")
 
 

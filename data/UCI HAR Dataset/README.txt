@@ -1,70 +1,59 @@
-==================================================================
-Human Activity Recognition Using Smartphones Dataset
-Version 1.0
-==================================================================
-Jorge L. Reyes-Ortiz, Davide Anguita, Alessandro Ghio, Luca Oneto.
-Smartlab - Non Linear Complex Systems Laboratory
-DITEN - Università degli Studi di Genova.
-Via Opera Pia 11A, I-16145, Genoa, Italy.
-activityrecognition@smartlab.ws
-www.smartlab.ws
-==================================================================
+There are two scripts that can be used in the project: Loading Data.R and run_analysis.R
 
-The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, we captured 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data. 
+Loading Data.R          This program is used to download the UCI HAR Dataset from the following link:
+                        https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
+                        
+                        This script checks to see if there is a folder "./data" already created. If this folder does not exist,
+                        then it is created and the data is downloaded. Additionally, it unzips the downloaded file and then 
+                        removes the zip file.
+                        
+                        If this folder already exists, nothing is done.
+                        
+                        
+run_analysis.R          This script does all of the remaining work of reading the downloaded data and creating tidy data sets. 
+                        The final step is saving the following two tidy datasets in the folder ./data/UCI HAR Dataset(tidy)
+                        dataset 1: train_test_mean_std
+                        dataset 2: variable_means
+                        
+The following is a more detailed breakdown of run_analysis.R mainly taken from the annotations within the code:
 
-The sensor signals (accelerometer and gyroscope) were pre-processed by applying noise filters and then sampled in fixed-width sliding windows of 2.56 sec and 50% overlap (128 readings/window). The sensor acceleration signal, which has gravitational and body motion components, was separated using a Butterworth low-pass filter into body acceleration and gravity. The gravitational force is assumed to have only low frequency components, therefore a filter with 0.3 Hz cutoff frequency was used. From each window, a vector of features was obtained by calculating variables from the time and frequency domain. See 'features_info.txt' for more details. 
+Naming conventions ----------------------------------------------------------
+variable names: underscore_separated - all lowercasewords separated by underscores
+function names: period.separated - all lowercasewords separated by periods such as as.numeric()
+sections of code: The start of new sections is denoted as below:
+                        ##[section name] ------- until the end of line
 
-For each record it is provided:
-======================================
+LIBRARY CALLS ---------------------------------------------------------------
+library(dplyr)
 
-- Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
-- Triaxial Angular velocity from the gyroscope. 
-- A 561-feature vector with time and frequency domain variables. 
-- Its activity label. 
-- An identifier of the subject who carried out the experiment.
+Ordered steps of run_analysis:
 
-The dataset includes the following files:
-=========================================
+IMPORT DATA -----------------------------------------------------------------
+Read in the following files and if they are not there, throw an error:
+      Xtrain.txt              Xtest.txt               ytrain.txt
+      ytest.txt               features.txt            
 
-- 'README.txt'
+MERGE DATA ------------------------------------------------------------------
+Merge the activity labels with the corresponding train/test data and then
+      merge all the test and train data together
 
-- 'features_info.txt': Shows information about the variables used on the feature vector.
+EXTRACT: Mean and Std dev measurements ---------------------------------------
+My interpretation is to only get the variables with the text mean() or std().
+   I am purposely choosing not to include meanFreq() as I do not think that is desired. 
 
-- 'features.txt': List of all features.
+RELABEL: Activities and Variable Names --------------------------------------
 
-- 'activity_labels.txt': Links the class labels with their activity name.
+The existing naming convention for the activities (1 through 6) is not helpful. We will relabel 
+them with the labels provided in the study:
+"WALKING","WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS","SITTING", "STANDING", "LAYING"
 
-- 'train/X_train.txt': Training set.
+We want to rename the variable names as well. For the most part we will reuse the names provided 
+in the feature.txt and features_info.txt files with 6 exceptions. It seems to be unintentional, 
+but 6 variable names have "BodyBody" in their title. We will replace this with just "Body" as the
+feature_info.txt file matches this interpretation.
 
-- 'train/y_train.txt': Training labels.
+CREATE a new tidy data set --------------------------------------------------
+Make the dataset of the average of each variable for each activity and each subject
 
-- 'test/X_test.txt': Test set.
-
-- 'test/y_test.txt': Test labels.
-
-The following files are available for the train and test data. Their descriptions are equivalent. 
-
-- 'train/subject_train.txt': Each row identifies the subject who performed the activity for each window sample. Its range is from 1 to 30. 
-
-- 'train/Inertial Signals/total_acc_x_train.txt': The acceleration signal from the smartphone accelerometer X axis in standard gravity units 'g'. Every row shows a 128 element vector. The same description applies for the 'total_acc_x_train.txt' and 'total_acc_z_train.txt' files for the Y and Z axis. 
-
-- 'train/Inertial Signals/body_acc_x_train.txt': The body acceleration signal obtained by subtracting the gravity from the total acceleration. 
-
-- 'train/Inertial Signals/body_gyro_x_train.txt': The angular velocity vector measured by the gyroscope for each window sample. The units are radians/second. 
-
-Notes: 
-======
-- Features are normalized and bounded within [-1,1].
-- Each feature vector is a row on the text file.
-
-For more information about this dataset contact: activityrecognition@smartlab.ws
-
-License:
-========
-Use of this dataset in publications must be acknowledged by referencing the following publication [1] 
-
-[1] Davide Anguita, Alessandro Ghio, Luca Oneto, Xavier Parra and Jorge L. Reyes-Ortiz. Human Activity Recognition on Smartphones using a Multiclass Hardware-Friendly Support Vector Machine. International Workshop of Ambient Assisted Living (IWAAL 2012). Vitoria-Gasteiz, Spain. Dec 2012
-
-This dataset is distributed AS-IS and no responsibility implied or explicit can be addressed to the authors or their institutions for its use or misuse. Any commercial use is prohibited.
-
-Jorge L. Reyes-Ortiz, Alessandro Ghio, Luca Oneto, Davide Anguita. November 2012.
+SAVE the two dataframes -----------------------------------------------------
+We will save both data frames into a new folder called data/UCI HAR Dataset/tidy data folder of the project
