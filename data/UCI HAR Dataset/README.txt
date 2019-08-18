@@ -1,4 +1,4 @@
-There are two scripts that can be used in the project: Loading Data.R and run_analysis.R
+There are two scripts that can be used in the project located in the ./Scripts/ folder: Loading Data.R and run_analysis.R
 
 Loading Data.R          This program is used to download the UCI HAR Dataset from the following link:
                         https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
@@ -14,7 +14,9 @@ run_analysis.R          This script does all of the remaining work of reading th
                         The final step is saving the following two tidy datasets in the folder ./data/UCI HAR Dataset(tidy)
                         dataset 1: train_test_mean_std
                         dataset 2: variable_means
-                        
+
+
+
 The following is a more detailed breakdown of run_analysis.R mainly taken from the annotations within the code:
 
 Naming conventions ----------------------------------------------------------
